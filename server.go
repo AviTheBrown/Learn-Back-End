@@ -50,7 +50,7 @@ func main() {
 		Addr: "127.0.0.1:8080",
 	}
 
-    // handle the request in according to the URL path and calling the instance of that handler.
+    // handle the request in according to the URL path and calling the instance of that handler using the built in HTTP handler methods.
 	http.Handle("/hello", &hello)
 	http.Handle("/world", &world)
 
