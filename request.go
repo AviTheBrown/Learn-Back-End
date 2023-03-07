@@ -30,12 +30,18 @@ func body(writer http.ResponseWriter, req *http.Request)  {
     defer req.Body.Close()
     writer.Write([]byte(body))
 }
+
+func process(writer http.ResponseWriter, req *http.Request)  {
+    req.ParseForm()
+    fmt.Fprintln(writer, req.Form)
+}
 func main() {
 	server := http.Server{
 		Addr: "127.0.0.1:8080",
 	}
-	http.HandleFunc("/header", headers)
-    http.HandleFunc("/body", body)
+//	http.HandleFunc("/header", headers)
+//    http.HandleFunc("/body", body)
+    http.HandleFunc("/process", process)
     fmt.Printf("Starting server.....")
 	server.ListenAndServe()
 
