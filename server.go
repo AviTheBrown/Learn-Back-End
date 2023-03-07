@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"reflect"
-	"runtime"
 )
 
 type Myhandler struct {}
@@ -20,11 +18,10 @@ func hello2(w http.ResponseWriter, r *http.Request)  {
 // log -> creartes a log that tell the developer that a handler function with the name
     // name is being requested to the client using closure.
 func log(h http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		name := runtime.FuncForPC(reflect.ValueOf(h).Pointer()).Name()
-		fmt.Println("Handler function name is called: ", name)
-		h(w, r)
-	}
+    return func(writer http.ResponseWriter, request *http.Request) {
+        fmt.Printf("Handler %T was called", h)
+        h(writer,request)
+    }
 }
 
 type helloHand struct {}
@@ -51,6 +48,7 @@ func main() {
 	server := http.Server{
 		Addr: "127.0.0.1:8080",
 	}
+    // the log must be chain together in order for the log to work
 	http.HandleFunc("/hello2", log(hello2))
 	http.Handle("/hello", &hello)
 	http.Handle("/world", &world)
