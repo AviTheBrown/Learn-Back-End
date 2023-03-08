@@ -4,8 +4,17 @@
     <title>Go Web Programming</title>
   </head>
   <body>
-    <form action=http://127.0.0.1:8080/process?hello=world&thread=123method="post" enctype="application/x-www-form-urlencoded">
-    <input type="text" name="hello" value="Avin"/>
+<!-- the server is localhost: 8080 the url path is /process -> the first KV pair is -->
+<!--    key = hello : value = world  | key = thread : value = 123 | and this is a POST request -->
+
+<!--IMPORTANT
+  In Go, when a map is constructed from multiple key-value pairs with the same key,
+  the value for that key in the resulting map is an array or slice of values with that key.
+  in this case the key "hello" has 2 values "world" and "Avin" thus resulting in an array of slices
+  -->
+    <form action=http://127.0.0.1:8080/process?hello=world&thread=123 method="POST" enctype="application/x-www-form-urlencoded">
+<!--    -->
+    <input type="text" name="hello" value="Avin Brown"/>
               <input type="text" name="post" value="456"/>
               <input type="submit"/>
             </form>
