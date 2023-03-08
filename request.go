@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"net/http"
+    "reflect"
+    "runtime"
 )
 
 func headers(writer http.ResponseWriter, req *http.Request) {
@@ -33,16 +35,31 @@ func body(writer http.ResponseWriter, req *http.Request)  {
     defer req.Body.Close()
     writer.Write([]byte(body))
 }
-
+func log(h http.HandlerFunc) http.HandlerFunc {
+    return func(writer http.ResponseWriter, req *http.Request) {
+        name := runtime.FuncForPC(reflect.ValueOf(h).Pointer()).Name()
+        fmt.Println( "The handler %T was invoked\n", name)
+        h(writer, req)
+    }
+}
 func process(writer http.ResponseWriter, req *http.Request)  {
     fmt.Fprintf(writer, "this is the process\n")
-
+    // parses the form from the clienr
     req.ParseForm()
+    // parses form usinf a specified amount of memory to perform the action
+    //
+    req.ParseMultipartForm(1024)
     // this only parses and retireves the key-value pair of the form and omits the
     // URL key-value pairs.
     fmt.Fprintln(writer, req.PostForm)
+
     // prints both the URL and form KV pairs
     fmt.Fprintln(writer, req.Form)
+
+    // MultiparseForm only contains the form KV pairs
+    // only with "multipart/form-data" enctype
+    // if you use application/x-www-form-urlencoded enctype it will return nil
+    fmt.Fprintln(writer, req.MultipartForm)
 }
 func main() {
 	server := http.Server{
@@ -50,8 +67,8 @@ func main() {
 	}
 	http.HandleFunc("/header", headers)
     http.HandleFunc("/body", body)
-    http.HandleFunc("/process", process)
-    fmt.Printf("Starting server.....")
+    http.HandleFunc("/process", log(process))
+    fmt.Printf("Starting server.....\n")
 	server.ListenAndServe()
 
 }
