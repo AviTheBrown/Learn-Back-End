@@ -72,7 +72,17 @@ func process(writer http.ResponseWriter, req *http.Request)  {
     // and it ignores other values with the same key.
     // However, it also looks for the value in the URL query parameters
     // and the path parameters, and it returns the first value found.
+
+	// this will display to the client the value that is found in the URL and not the form
     fmt.Fprintf(writer, req.FormValue("hello"))
+	// this will display the values form the key "hello" to the client
+	fmt.Fprintln(writer, "(1)", req.FormValue("hello"))
+	// this will display the value of the key "hello" from the Post to the client
+	fmt.Fprintln(writer, "(2)", req.PostFormValue("hello"))
+	// this will display the a mapping of the KV pairs if the html is using the "application-wwww"
+	fmt.Fprintln(writer, "(3)", req.PostForm)
+	// the is will diplay to the client the mapping to the KV pairs
+	fmt.Fprintln(writer, "(4)", req.MultipartForm)
 }
 func main() {
 	server := http.Server{
