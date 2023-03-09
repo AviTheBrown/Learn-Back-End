@@ -60,6 +60,19 @@ func process(writer http.ResponseWriter, req *http.Request)  {
     // only with "multipart/form-data" enctype
     // if you use application/x-www-form-urlencoded enctype it will return nil
     fmt.Fprintln(writer, req.MultipartForm)
+
+    // access the KV pair from the form without have to parse the form
+    // it does it by itself
+    // with "application/x-www-form-urlencoded" :
+    // it retrieves the first value associated with the given key from the request body,
+    // and it ignores other values with the same key.
+    // --------------
+    // with  "multipart/form-data"
+    // it  retrieves the first value associated with the given key from the request body,
+    // and it ignores other values with the same key.
+    // However, it also looks for the value in the URL query parameters
+    // and the path parameters, and it returns the first value found.
+    fmt.Fprintf(writer, req.FormValue("hello"))
 }
 func main() {
 	server := http.Server{
@@ -70,5 +83,4 @@ func main() {
     http.HandleFunc("/process", log(process))
     fmt.Printf("Starting server.....\n")
 	server.ListenAndServe()
-
 }
