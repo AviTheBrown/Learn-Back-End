@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"reflect"
-	"runtime"
 )
 
 type helloHandler struct{}
@@ -24,7 +22,7 @@ func hello2(writer http.ResponseWriter, req *http.Request) {
 //		h(writer, request)
 //	}
 //}
-
+// testing
 func main() {
 	hello := hello2
 

@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"net/http"
+    "io/ioutil"
+    "net/http"
     "reflect"
     "runtime"
 )
@@ -38,17 +39,26 @@ func body(writer http.ResponseWriter, req *http.Request)  {
 func log(h http.HandlerFunc) http.HandlerFunc {
     return func(writer http.ResponseWriter, req *http.Request) {
         name := runtime.FuncForPC(reflect.ValueOf(h).Pointer()).Name()
-        fmt.Println( "The handler %T was invoked\n", name)
+        fmt.Printf( "The handler %T was invoked\n", name)
         h(writer, req)
     }
 }
 func process(writer http.ResponseWriter, req *http.Request)  {
-    fmt.Fprintf(writer, "this is the process\n")
-    // parses the form from the clienr
-    req.ParseForm()
-    // parses form usinf a specified amount of memory to perform the action
-    //
-    req.ParseMultipartForm(1024)
+    fmt.Fprintf(writer, "this is the process handler\n")
+        file, header, err := req.FormFile("uploaded")
+        if err != nil {
+            http.Error(writer, err.Error(), http.StatusBadRequest)
+            return
+        }
+        defer file.Close()
+        fmt.Println("File path:", header.Filename)
+        fmt.Fprintln(writer, "Uploaded file %+v\n", header.Filename)
+    data, err := ioutil.ReadAll(file)
+    if err != nil {
+        http.Error(writer, err.Error(), http.StatusBadRequest)
+        return
+    }
+    fmt.Fprintln(writer, string(data))
     // this only parses and retireves the key-value pair of the form and omits the
     // URL key-value pairs.
     fmt.Fprintln(writer, req.PostForm)
@@ -73,24 +83,25 @@ func process(writer http.ResponseWriter, req *http.Request)  {
     // However, it also looks for the value in the URL query parameters
     // and the path parameters, and it returns the first value found.
 
-	// this will display to the client the value that is found in the URL and not the form
-    fmt.Fprintf(writer, req.FormValue("hello"))
-	// this will display the values form the key "hello" to the client
-	fmt.Fprintln(writer, "(1)", req.FormValue("hello"))
-	// this will display the value of the key "hello" from the Post to the client
-	fmt.Fprintln(writer, "(2)", req.PostFormValue("hello"))
-	// this will display the a mapping of the KV pairs if the html is using the "application-wwww"
-	fmt.Fprintln(writer, "(3)", req.PostForm)
-	// the is will diplay to the client the mapping to the KV pairs
-	fmt.Fprintln(writer, "(4)", req.MultipartForm)
+//	// this will display to the client the value that is found in the URL and not the form
+//    fmt.Fprintf(writer, req.FormValue("hello"))
+//	// this will display the values from the key "hello" of the form to the client
+//	fmt.Fprintln(writer, "(1)", req.FormValue("hello"))
+//	// this will display the value of the key "hello" from the Post to the client
+//	fmt.Fprintln(writer, "(2)", req.PostFormValue("hello"))
+//	// this will display the mapping of the KV pairs if the form using the "application-wwww"
+//	fmt.Fprintln(writer, "(3)", req.PostForm)
+//	// the is will diplay to the client the mapping to the KV pairs of the form
+//        // this can only be used when using the multipart-form data enctype
+//	fmt.Fprintln(writer, "(4)", req.MultipartForm)
 }
 func main() {
 	server := http.Server{
 		Addr: "127.0.0.1:8080",
 	}
-	http.HandleFunc("/header", headers)
-    http.HandleFunc("/body", body)
-    http.HandleFunc("/process", log(process))
+//	http.HandleFunc("/header", headers)
+//    http.HandleFunc("/body", body)
+    http.HandleFunc("/process", process)
     fmt.Printf("Starting server.....\n")
 	server.ListenAndServe()
 }
