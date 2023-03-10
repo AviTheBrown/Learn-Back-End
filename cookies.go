@@ -16,15 +16,15 @@ func setCookies(writer http.ResponseWriter, req *http.Request) {
 		Value: "Something else",
 		HttpOnly: true,
 	}
-	// this creates Header text of "Set-Cookie" to the stringify version of c1 and c2
-	writer.Header().Set("Set-Cookie", c1.String())
-	writer.Header().Set("Set-Cookie", c2.String())
+	http.SetCookie(writer, &c1)
+	http.SetCookie(writer, &c2)
 
 }
 func main(){
 	server := http.Server{
 		Addr: "127.0.0.1:8080",
 	}
+	http.HandleFunc("/set-cookies", setCookies)
 	server.ListenAndServe()
 	
 }
