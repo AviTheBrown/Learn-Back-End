@@ -14,6 +14,7 @@ func (h *helloHandler) ServeHTTP(writer http.ResponseWriter, request *http.Reque
 func hello2(writer http.ResponseWriter, req *http.Request) {
 	writer.Write([]byte("hello2"))
 }
+
 //func log(h http.HandlerFunc) http.HandlerFunc {
 //	return func(writer http.ResponseWriter, request *http.Request) {
 //		name := runtime.FuncForPC(reflect.ValueOf(h).Pointer()).Name()

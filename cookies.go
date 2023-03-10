@@ -1,30 +1,37 @@
 package main
-
 import (
-	"net/http"
+    "fmt"
+"net/http"
 )
-
-func setCookies(writer http.ResponseWriter, req *http.Request) {
-	// this creates a new instance of Cookies with 3 fields set
-	c1 := http.Cookie {
-		Name: "first cookie",
-		Value: "Go web Programming",
-		HttpOnly: true,
-	}
-	c2 := http.Cookie {
-		Name: "Second Cookie",
-		Value: "Something else",
-		HttpOnly: true,
-	}
-	http.SetCookie(writer, &c1)
-	http.SetCookie(writer, &c2)
+func setCookie (h http.ResponseWriter, r *http.Request) {
+    cookie1 := http.Cookie{
+        Name: "Cookie 1",
+        Value: "value 1",
+    }
+    cookie2 := http.Cookie{
+        Name: "Cookie 2",
+        Value: "value 2",
+    }
+    http.SetCookie(h, &cookie1)
+    http.SetCookie(h, &cookie2)
+    fmt.Fprintln(h, "cookie cookie2222")
 
 }
-func main(){
-	server := http.Server{
-		Addr: "127.0.0.1:8080",
-	}
-	http.HandleFunc("/set-cookies", setCookies)
-	server.ListenAndServe()
-	
+
+func getCookie(w http.ResponseWriter, r *http.Request)  {
+    h := r.Cookies()
+    for _, cookie := range h {
+        fmt.Fprintf(w, "this is the name from cookie", cookie.Name)
+    }
+    fmt.Fprintln(w, "cookie cookie")
+}
+func main() {
+
+    server := http.Server{
+        Addr: "127.0.0.1:8080",
+    }
+    http.HandleFunc("/setCookie", setCookie)
+    http.HandleFunc("/getCookie", getCookie)
+    fmt.Println("server .....")
+    server.ListenAndServe()
 }
