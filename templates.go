@@ -1,10 +1,11 @@
+
 package main
-
-
 
 import (
 	"net/http"
 	"html/template"
+	"math/rand"
+	"time"
 )
 
 func main() {
@@ -13,24 +14,15 @@ func main() {
 	}
 
 	http.HandleFunc("/parse", processTempl)
+	fmt.Println("Server staring...")
 	server.ListenAndServe()
-	
 }
 
 
 func processTempl(w http.ResponseWriter, r *http.Request){
-	tmpl := `<!DOCTYPE html>
-        <html>
-          <head>
-            <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-            <title>Go Web Programming</title>
-          </head>
-          <body>
-            {{ . }}
-          </body>
-        </html>`
+	t, _ := template.ParseFiles("tmpl.html")
 
-	t := template.New("tmpl.html")
-	t ,_= t.Parse(tmpl)
-	t.Execute(w, "Hello Go")
+	rand.Seed(time.Now().Unix())
+	t.Execute(w, rand.Intn(10) > 5)
+
 }
