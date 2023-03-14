@@ -7,10 +7,14 @@
     <title>Go Web Programming</title>
   </head>
   <body>
-    {{ if . }}
-    Number is greater than 5
+  <div> The dot is set to {{ . }} </div>
+  <div>
+  {{ with "world"}}
+      <div style="background-color: orange">Now the dot will be set to {{ . }} </div>
     {{ else }}
-    Number is less than 5
+    The dot is still {{ . }}
     {{ end }}
-  </body>
+    </div>
+   <div>The dot is set to {{ . }}</div>
+ </body>
 </html>

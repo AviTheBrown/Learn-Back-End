@@ -1,0 +1,20 @@
+ <!DOCTYPE html>
+     <html lang="en">
+         <head>
+            <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=9">
+            <title>Go Web Programming</title>
+       </head>
+      <body>
+            <div> This is t1.html before</div>
+<!--            // create the action that will take the value passed in the template.Execut()-->
+<!--            // method.-->
+            <div>This is the value of the dot in t1.html - [{{ . }}]</div>
+            <hr/>
+<!--             will parse the template for t2.html and display it ti to the client-->
+            {{ template "t2.html" }}
+            <hr/>
+<!--            //just displays the text-->
+    <div> This is t1.html after</div>
+  </body>
+</html>
