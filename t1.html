@@ -6,13 +6,14 @@
             <title>Go Web Programming</title>
        </head>
       <body>
+      <div> {{ 12.34343 | printf "%.2f" }} </div>
             <div> This is t1.html before</div>
 <!--            // create the action that will take the value passed in the template.Execut()-->
 <!--            // method.-->
             <div>This is the value of the dot in t1.html - [{{ . }}]</div>
             <hr/>
 <!--             will parse the template for t2.html and display it ti to the client-->
-            {{ template "t2.html" }}
+            {{ template "t2.html"  . }}
             <hr/>
 <!--            //just displays the text-->
     <div> This is t1.html after</div>

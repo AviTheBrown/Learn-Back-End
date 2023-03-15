@@ -1,17 +1,18 @@
 package main
 
 import (
+    "fmt"
     "html/template"
     "net/http"
     "time"
 )
 
 func formatData (t time.Time) string {
-    layout := ""
+    layout := "2006-01-02"
     return t.Format(layout)
 }
 func process2(w http.ResponseWriter, r *http.Request) {
-    // creates a key value pair { map[stirng][function] }
+    // creates a key value pair map { map[stirng][function] }
     // that will be called once the template is executed.
     funcMap := template.FuncMap{ "fdate": formatData }
     // creates a new template .New("tmpl.html")
@@ -35,5 +36,6 @@ func main() {
         Addr: "127.0.0.1:8080",
     }
     http.HandleFunc("/parse", process2)
+    fmt.Println("server starting ....")
     server.ListenAndServe()
 }

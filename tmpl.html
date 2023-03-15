@@ -7,14 +7,6 @@
     <title>Go Web Programming</title>
   </head>
   <body>
-  <div> The dot is set to {{ . }} </div>
-  <div>
-  {{ with "world"}}
-      <div style="background-color: orange">Now the dot will be set to {{ . }} </div>
-    {{ else }}
-    The dot is still {{ . }}
-    {{ end }}
-    </div>
-   <div>The dot is set to {{ . }}</div>
+  <div> The date/time is {{ fdate . }} </div>
  </body>
 </html>
