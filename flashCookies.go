@@ -7,26 +7,25 @@ import (
 	"time"
 )
 
-
 func setMessage(w http.ResponseWriter, r *http.Request) {
 	myMsg := []byte("hiiiiii")
-//	c1 := http.Cookie{
-//		Name:     "Hello1",
-//		Value:    base64.URLEncoding.EncodeToString(myMsg),
-//		HttpOnly: true,
-//	}
-    c1 := http.Cookie{
-        Name: "Gopher",
-        Value: base64.URLEncoding.EncodeToString(myMsg),
-    }
+	//	c1 := http.Cookie{
+	//		Name:     "Hello1",
+	//		Value:    base64.URLEncoding.EncodeToString(myMsg),
+	//		HttpOnly: true,
+	//	}
+	c1 := http.Cookie{
+		Name:  "Gopher",
+		Value: base64.URLEncoding.EncodeToString(myMsg),
+	}
 
 	c2 := http.Cookie{
-		Name:    "Lama",
-		Value:   base64.URLEncoding.EncodeToString(myMsg),
+		Name:  "Lama",
+		Value: base64.URLEncoding.EncodeToString(myMsg),
 	}
 
 	http.SetCookie(w, &c1)
-    http.SetCookie(w, &c2)
+	http.SetCookie(w, &c2)
 
 	fmt.Fprint(w, "this is the set handler")
 }
