@@ -20,13 +20,13 @@ var PostById map[int]*Post
 // an array of Post intances.
 var PostByAuthor map[string][]*Post
 
-func storeData(post Post) {
+func storeData(post *Post) {
 	// PostById -> this creates a map between the post.Id from the post passed in as an argument
 	// and an actual post instance.
-	PostById[post.Id] = &post
+	PostById[post.Id] = post
 	// this creates a map between the post.Author and a post instance passed in
 	// both of these things will enable the lookup of contents from a post instance
-	PostByAuthor[post.Author] = append(PostByAuthor[post.Author], &post)
+	PostByAuthor[post.Author] = append(PostByAuthor[post.Author],post)
 }
 
 func main() {
@@ -54,12 +54,13 @@ func main() {
 		Author:  "Andy",
 	}
 
-	storeData(post1)
-	storeData(post2)
-	storeData(post3)
+	storeData(&post1)
+	storeData(&post2)
+	storeData(&post3)
 
-//	fmt.Println(PostById[2])
-//	fmt.Println(PostById[3])
+	fmt.Println(PostById[1])
+	fmt.Println(PostById[2])
+	fmt.Println(PostById[3])
 
 	// this will loop over the PostByUthor map
 	// find all instances of post with the of "Andy" as the authour
